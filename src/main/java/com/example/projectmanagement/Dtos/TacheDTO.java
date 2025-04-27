@@ -3,6 +3,7 @@ package com.example.projectmanagement.Dtos;
 import com.example.projectmanagement.Entities.Enums.EtatTacheEnum;
 import com.example.projectmanagement.Entities.Enums.TypeCoutEnum;
 import com.example.projectmanagement.Entities.Enums.TypeDureeEnum;
+import com.example.projectmanagement.Entities.Tache;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -22,4 +23,10 @@ public class TacheDTO {
     private TypeDureeEnum typeDuree;
     private TypeCoutEnum typeCout;
     private Integer avancementTache;
+
+
+    //SH
+    public TacheDTO(Tache tache){
+        return ;
+    }
 }
