@@ -7,5 +7,4 @@ import java.util.List;
 
 public interface ProjetRepository extends MongoRepository<Projet, String> {
     boolean existsByCode(String code);
-    List<Projet> findByIdEncadrant(String idEncadrant);
 }
