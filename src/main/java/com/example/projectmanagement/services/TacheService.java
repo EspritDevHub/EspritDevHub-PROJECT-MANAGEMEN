@@ -1,75 +1,71 @@
 package com.example.projectmanagement.services;
 
+
 import com.example.projectmanagement.Dtos.TacheDTO;
 import com.example.projectmanagement.Entities.Tache;
 import com.example.projectmanagement.iservices.ITacheService;
 import com.example.projectmanagement.repository.TacheRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
 @Service
+@RequiredArgsConstructor
 public class TacheService implements ITacheService {
 
-
-    @Autowired
-    private TacheRepository TacheRepository;
+    private final TacheRepository tacheRepository;
 
     @Override
-    public TacheDTO createTache(TacheDTO TacheDTO) {
-        Tache Tache = new Tache(TacheDTO);
-        Tache = TacheRepository.save(Tache);
-        return new TacheDTO(Tache);
+    public TacheDTO createTache(TacheDTO tacheDTO) {
+        Tache tache = new Tache(tacheDTO);
+        return convertToDTO(tacheRepository.save(tache));
     }
 
     @Override
-    public TacheDTO updateTache(String id, TacheDTO TacheDTO) {
-        Tache Tache = TacheRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Tache not found"));
-        // Update fields
-        /*Tache.setCode(TacheDTO.getCode());
-        Tache.setTitre(TacheDTO.getTitre());
-        Tache.setDescription(TacheDTO.getDescription());
-        Tache.setEtat(TacheDTO.getEtat());
-        Tache.setEtapeManagement(TacheDTO.getEtapeManagement());
-        Tache.setEtapeTache(TacheDTO.getEtapeTache());
-        Tache.setDateDeb(TacheDTO.getDateDeb());
-        Tache.setDateFin(TacheDTO.getDateFin());
-        Tache.setDateDebPrevu(TacheDTO.getDateDebPrevu());
-        Tache.setDateFinPrevu(TacheDTO.getDateFinPrevu());
-        Tache.setPortefeuilleId(TacheDTO.getPortefeuilleId());
-        Tache.setProgrammeId(TacheDTO.getProgrammeId());
-        Tache.setTypeTache(TacheDTO.getTypeTache());
-        Tache.setFournisseurId(TacheDTO.getFournisseurId());
-        Tache.setSponsorId(TacheDTO.getSponsorId());
-        Tache.setChefDeTacheId(TacheDTO.getChefDeTacheId());
-        Tache.setClientId(TacheDTO.getClientId());
-        Tache.setCreatedBy(TacheDTO.getCreatedBy());
-        Tache.setCreationDate(TacheDTO.getCreationDate());
-
-        Tache = TacheRepository.save(Tache);*/
-        return new TacheDTO(Tache);
+    public TacheDTO updateTache(String id, TacheDTO tacheDTO) {
+        Tache existing = tacheRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Tâche non trouvée avec ID : " + id));
+        Tache updatedTache = new Tache(tacheDTO);
+        updatedTache.setId(id);
+        return convertToDTO(tacheRepository.save(updatedTache));
     }
 
     @Override
     public TacheDTO getTacheById(String id) {
-        Tache Tache = TacheRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Tache not found"));
-        return new TacheDTO(Tache);
+        Tache tache = tacheRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Tâche non trouvée avec ID : " + id));
+        return convertToDTO(tache);
     }
 
     @Override
     public List<TacheDTO> getAllTaches() {
-        List<Tache> Taches = TacheRepository.findAll();
-        return Taches.stream()
-
-                .map((Tache t) -> new TacheDTO((Tache) Taches))
+        return tacheRepository.findAll()
+                .stream()
+                .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
     @Override
     public void deleteTache(String id) {
-        TacheRepository.deleteById(id);
+        tacheRepository.deleteById(id);
+    }
+
+    @Override
+    public List<TacheDTO> getTachesByProjet(String projetId) {
+        List<Tache> taches = tacheRepository.findByProjetId(projetId);
+
+        // Retourner une liste vide si aucune tâche n'est trouvée
+        return taches.isEmpty() ? List.of() : taches.stream()
+                .map(this::convertToDTO)
+                .collect(Collectors.toList());
+    }
+
+
+
+    private TacheDTO convertToDTO(Tache tache) {
+        // Conversion de l'entité Tache en DTO
+        return new TacheDTO(tache);  // Utilisez le constructeur pour convertir
     }
 }
