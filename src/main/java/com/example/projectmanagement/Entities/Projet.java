@@ -27,7 +27,8 @@ public class Projet {
     private String titre;           // Titre du projet
     private String description;     // Description du projet
 
-    private EtatProjetEnum etat;    // Statut du projet
+    private EtatProjetEnum etat;// L'état Kanban du projet
+    private Integer ordre;// Position dans la colonne Kanban
     private EtapeProjetEnum etapeProjet;  // Etape du projet (ex : "REALISATION")
 
     private LocalDate dateDebut;      // Date de début du projet
@@ -36,6 +37,7 @@ public class Projet {
     private Groupe groupe;         // Identifiant du groupe
     private boolean retard;
     private Double avancement;
+
     public boolean isRetard() {
         return retard;
     }

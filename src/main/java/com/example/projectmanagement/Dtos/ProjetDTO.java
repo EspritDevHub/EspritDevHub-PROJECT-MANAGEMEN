@@ -25,6 +25,7 @@ public class ProjetDTO {
 
     private EtatProjetEnum etat;
     private EtapeProjetEnum etapeProjet;
+    private Integer ordre;
 
     private LocalDate dateDebut;
     private LocalDate dateFinPrevu;

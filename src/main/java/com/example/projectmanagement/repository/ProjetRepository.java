@@ -23,5 +23,16 @@ public interface ProjetRepository extends MongoRepository<Projet, String> {
 
     // Méthode pour récupérer un projet par son étape
     List<Projet> findByEtapeProjet(EtapeProjetEnum etapeProjet);
+    // Trouver les projets par état (utile pour afficher une colonne Kanban)
+    List<Projet> findByEtatOrderByOrdreAsc(EtatProjetEnum etat);
+
+    // Trouver tous les projets triés par état et ordre (utile pour tableau complet Kanban)
+    List<Projet> findAllByOrderByEtatAscOrdreAsc();
+
+    // Trouver les projets créés par un utilisateur spécifique (optionnel pour dashboard utilisateur)
+    List<Projet> findByCreatedBy(Long createdBy);
+
+    // Rechercher par titre contenant un mot-clé (recherche dans la barre de recherche frontend)
+    List<Projet> findByTitreContainingIgnoreCase(String keyword);
 
 }

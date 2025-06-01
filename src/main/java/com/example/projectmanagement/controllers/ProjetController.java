@@ -2,13 +2,17 @@ package com.example.projectmanagement.controllers;
 
 import com.example.projectmanagement.Dtos.ProjetDTO;
 import com.example.projectmanagement.Dtos.TacheDTO;
+import com.example.projectmanagement.Entities.Enums.EtatProjetEnum;
+import com.example.projectmanagement.Entities.Projet;
 import com.example.projectmanagement.iservices.IProjetService;
+import com.example.projectmanagement.services.KanbanProjetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/projets")
@@ -16,6 +20,8 @@ public class ProjetController {
 
     @Autowired
     private IProjetService projetService;
+    @Autowired
+    private KanbanProjetService kanbanProjetService;
 
     // Création d'un projet
     @PostMapping
@@ -59,6 +65,18 @@ public class ProjetController {
         projetService.deleteProjet(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT); // Suppression réussie, pas besoin de vérifier
     }
+    @GetMapping("/kanban")
+    public ResponseEntity<Map<EtatProjetEnum, List<Projet>>> getKanbanProjets() {
+        Map<EtatProjetEnum, List<Projet>> kanban = kanbanProjetService.getProjetsParEtatKanban();
+        return new ResponseEntity<>(kanban, HttpStatus.OK);
+    }
 
-
+    @PutMapping("/kanban/{id}")
+    public ResponseEntity<Projet> updateEtatEtOrdreProjet(
+            @PathVariable String id,
+            @RequestParam EtatProjetEnum etat,
+            @RequestParam Integer ordre) {
+        Projet updatedProjet = kanbanProjetService.updateEtatEtOrdreProjet(id, etat, ordre);
+        return new ResponseEntity<>(updatedProjet, HttpStatus.OK);
+    }
 }
