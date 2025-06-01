@@ -3,8 +3,10 @@ package com.example.projectmanagement.controllers;
 import com.example.projectmanagement.Dtos.ProjetDTO;
 import com.example.projectmanagement.Dtos.TacheDTO;
 import com.example.projectmanagement.Entities.Enums.EtatProjetEnum;
+import com.example.projectmanagement.Entities.Groupe;
 import com.example.projectmanagement.Entities.Projet;
 import com.example.projectmanagement.iservices.IProjetService;
+import com.example.projectmanagement.repository.GroupeRepository;
 import com.example.projectmanagement.services.KanbanProjetService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -23,11 +25,18 @@ public class ProjetController {
     @Autowired
     private KanbanProjetService kanbanProjetService;
 
+    @Autowired
+    private GroupeRepository groupeRepository;
     // Création d'un projet
     @PostMapping
     public ResponseEntity<ProjetDTO> createProjet(@RequestBody ProjetDTO projetDTO) {
         ProjetDTO createdProjet = projetService.createProjet(projetDTO);
         return new ResponseEntity<>(createdProjet, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/addGroupe")
+    public ResponseEntity<Groupe> createGroupe(@RequestBody Groupe groupe) {
+        return new ResponseEntity<>(groupeRepository.save(groupe), HttpStatus.CREATED);
     }
 
     // Récupération d'un projet par son ID

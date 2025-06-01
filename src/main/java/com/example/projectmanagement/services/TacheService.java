@@ -6,14 +6,14 @@ package com.example.projectmanagement.services;
 
 
 import com.example.projectmanagement.Dtos.TacheDTO;
-import com.example.projectmanagement.Entities.Enums.EtatProjetEnum;
+
 import com.example.projectmanagement.Entities.Enums.EtatTacheEnum;
 import com.example.projectmanagement.Entities.Enums.TypeDureeEnum;
 import com.example.projectmanagement.Entities.Tache;
 import com.example.projectmanagement.iservices.ITacheService;
 import com.example.projectmanagement.repository.TacheRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -46,7 +46,7 @@ public class TacheService implements ITacheService {
         // Clone de la version avant modification (pour la comparaison)
         Tache ancienneTache = new Tache(existing); // Assure-toi d’avoir un constructeur de copie
 
-        // Mise à jour des champs
+
         existing.setTitre(tacheDTO.getTitre());
         existing.setDescription(tacheDTO.getDescription());
         existing.setEtat(tacheDTO.getEtat());
@@ -57,7 +57,7 @@ public class TacheService implements ITacheService {
         // Sauvegarde
         Tache saved = tacheRepository.save(existing);
 
-        // Notification automatique si changement d'état ou d'assignation
+
         notificationService.notifierChangementTache(ancienneTache, saved);
 
         return convertToDTO(saved);
@@ -170,7 +170,7 @@ public class TacheService implements ITacheService {
             notificationService.sendEmail(
                     saved.getAssigneA(),
                     "📌 Statut modifié",
-                    "Le statut de la tâche \"" + saved.getTitre() + "\" est désormais : " + saved.getEtat()
+                    "Le statut de la tâche \"" + saved.getTitre() + "\" est désormais : " + saved.getEtat(),false
             );
         }
 
@@ -178,7 +178,7 @@ public class TacheService implements ITacheService {
             notificationService.sendEmail(
                     saved.getAssigneA(),
                     "👤 Nouvelle tâche assignée",
-                    "Une tâche vous a été assignée : " + saved.getTitre()
+                    "Une tâche vous a été assignée : " + saved.getTitre(),false
             );
         }
 
@@ -194,7 +194,7 @@ public class TacheService implements ITacheService {
             notificationService.sendEmail(
                     tache.getAssigneA(),
                     "⏰ Rappel : tâche bientôt due",
-                    "Votre tâche \"" + tache.getTitre() + "\" est prévue pour le " + tache.getDateFin()
+                    "Votre tâche \"" + tache.getTitre() + "\" est prévue pour le " + tache.getDateFin(),false
             );
         }
     }

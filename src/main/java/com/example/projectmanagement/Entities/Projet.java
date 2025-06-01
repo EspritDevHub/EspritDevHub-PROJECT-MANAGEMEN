@@ -33,7 +33,7 @@ public class Projet {
 
     private LocalDate dateDebut;      // Date de début du projet
     private LocalDate dateFinPrevu;   // Date de fin prévue du projet
-@DBRef
+    @DBRef
     private Groupe groupe;         // Identifiant du groupe
     private boolean retard;
     private Double avancement;

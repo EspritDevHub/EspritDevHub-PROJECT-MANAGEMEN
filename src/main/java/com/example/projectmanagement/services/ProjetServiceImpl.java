@@ -42,15 +42,34 @@ public class ProjetServiceImpl implements IProjetService {
      @Autowired private TacheRepository tacheRepository;
 
 
+
     @Override
     public ProjetDTO createProjet(ProjetDTO projetDTO) {
+        Projet projet = convertToEntity(projetDTO);
+
+        projet.setCreationDate(LocalDate.now());
+        projet.setEtapeProjet(EtapeProjetEnum.ETUDE);
+        projet.setEtat(EtatProjetEnum.NON_COMMENCE);
+
+        // ✅ Safely fetch and assign the Groupe entity by ID
+        if (projetDTO.getGroupe() != null && projetDTO.getGroupe().getId() != null) {
+            Optional<Groupe> optionalGroupe = groupeRepository.findById(projetDTO.getGroupe().getId());
+            optionalGroupe.ifPresent(projet::setGroupe);
+        }
+
+        Projet saved = projetRepository.save(projet);
+        return convertToDTO(saved);
+    }
+
+
+ /*   public ProjetDTO createProjet(ProjetDTO projetDTO) {
         Projet projet = convertToEntity(projetDTO);
         projet.setCreationDate(LocalDate.now());
         projet.setEtapeProjet(EtapeProjetEnum.ETUDE);
         projet.setEtat(EtatProjetEnum.NON_COMMENCE);
 
         List<Phase> savedPhases = new ArrayList<>();
-
+        System.out.println(projet);
         if (projet.getJalons() != null) {
             for (Phase phase : projet.getJalons()) {
                 phase.setProjetId(projet.getId());
@@ -88,7 +107,7 @@ public class ProjetServiceImpl implements IProjetService {
         return convertToDTO(saved);
     }
 
-
+*/
 
     @Override
     public ProjetDTO updateProjet(String id, ProjetDTO projetDTO) {

@@ -30,7 +30,7 @@ public class ProjetDTO {
     private LocalDate dateDebut;
     private LocalDate dateFinPrevu;
 
-    //private Groupe groupe; // Ou nomGroupe si vous préférez exposer le nom
+    private Groupe groupe; // Ou nomGroupe si vous préférez exposer le nom
 
     private List<PhaseDTO> jalons;
 

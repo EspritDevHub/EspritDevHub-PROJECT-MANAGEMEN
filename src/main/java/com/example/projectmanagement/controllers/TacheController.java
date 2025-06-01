@@ -89,7 +89,7 @@ public class TacheController {
     @GetMapping("/test-email")
     public ResponseEntity<String> testEmail(@RequestParam String to) {
         try {
-            notificationService.sendEmail(to, "Test envoi email", "Ceci est un test d'envoi d'email.");
+            notificationService.sendEmail(to, "Test envoi email", "Ceci est un test d'envoi d'email.",false);
             return ResponseEntity.ok("Email envoyé à " + to);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erreur: " + e.getMessage());
