@@ -1,6 +1,7 @@
 package com.example.projectmanagement.iservices;
 
 import com.example.projectmanagement.Dtos.ProjetDTO;
+import com.example.projectmanagement.Entities.Sprint;
 
 import java.util.List;
 
@@ -20,4 +21,5 @@ public interface IProjetService {
 
     // Supprimer un projet par son ID
     void deleteProjet(String id);
+
 }

@@ -3,7 +3,9 @@ package com.example.projectmanagement.Entities;
 import com.example.projectmanagement.Entities.Enums.EtapeProjetEnum;
 import com.example.projectmanagement.Entities.Enums.EtatProjetEnum;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -14,6 +16,8 @@ import java.util.List;
 @Document(collection = "projets") // La collection MongoDB où seront stockés les projets
 @Data
 @NoArgsConstructor
+@Getter
+@Setter
 public class Projet {
 
     @Id
@@ -30,6 +34,12 @@ public class Projet {
     private LocalDate dateFinPrevu;   // Date de fin prévue du projet
 @DBRef
     private Groupe groupe;         // Identifiant du groupe
+    private boolean retard;
+    private Double avancement;
+    public boolean isRetard() {
+        return retard;
+    }
+
 
 
     // Liste des jalons (phases) directement dans l'entité Projet

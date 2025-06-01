@@ -4,6 +4,7 @@ package com.example.projectmanagement.controllers;
 import com.example.projectmanagement.Dtos.TacheDTO;
 import com.example.projectmanagement.Entities.Tache;
 import com.example.projectmanagement.iservices.ITacheService;
+import com.example.projectmanagement.services.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +12,7 @@ import org.springframework.http.converter.HttpMessageConversionException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/taches")
@@ -18,6 +20,8 @@ import java.util.List;
 public class TacheController {
 
     private final ITacheService tacheService;
+    private final NotificationService notificationService;
+
     @GetMapping("/projet/{projetId}")
     public ResponseEntity<List<TacheDTO>> getTachesByProjet(@PathVariable String projetId) {
         List<TacheDTO> taches = tacheService.getTachesByProjet(projetId);
@@ -30,6 +34,13 @@ public class TacheController {
 
         return ResponseEntity.ok(taches);
     }
+
+    @GetMapping("/taches/statistiques")
+    public ResponseEntity<Map<String, Double>> getTachesStatistiques() {
+        Map<String, Double> stats = tacheService.getTachesStats();
+        return ResponseEntity.ok(stats);
+    }
+
 
     // Création d'une tâche
     @PostMapping
@@ -74,4 +85,16 @@ public class TacheController {
         tacheService.deleteTache(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+    // Endpoint de test pour envoi email via Swagger
+    @GetMapping("/test-email")
+    public ResponseEntity<String> testEmail(@RequestParam String to) {
+        try {
+            notificationService.sendEmail(to, "Test envoi email", "Ceci est un test d'envoi d'email.");
+            return ResponseEntity.ok("Email envoyé à " + to);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erreur: " + e.getMessage());
+        }
+    }
+
+
 }

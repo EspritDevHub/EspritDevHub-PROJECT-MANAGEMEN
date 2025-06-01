@@ -5,7 +5,9 @@ import com.example.projectmanagement.Entities.Enums.EtatTacheEnum;
 import com.example.projectmanagement.Entities.Enums.TypeDureeEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -14,6 +16,8 @@ import java.time.LocalDateTime;
 @Document(collection = "taches")
 @Data
 @NoArgsConstructor
+@Getter
+@Setter
 public class Tache {
 
     @Id
@@ -33,7 +37,7 @@ public class Tache {
     private Float duree;                    // Durée estimée (ex: 3.5)
     private TypeDureeEnum typeDuree;//(heure, jour)
     private String projetId;
-
+    private String sprintId;
     public Tache(TacheDTO dto) {
         this.id = dto.getId();
         this.titre = dto.getTitre();
@@ -45,5 +49,20 @@ public class Tache {
         this.avancement = dto.getAvancement();
         this.duree = dto.getDuree();
         this.typeDuree = dto.getTypeDuree();
+    }
+    // Constructeur de copie
+    public Tache(Tache other) {
+        this.id = other.id;
+        this.titre = other.titre;
+        this.description = other.description;
+        this.assigneA = other.assigneA;
+        this.dateDebut = other.dateDebut;
+        this.dateFin = other.dateFin;
+        this.etat = other.etat;
+        this.avancement = other.avancement;
+        this.duree = other.duree;
+        this.typeDuree = other.typeDuree;
+        this.projetId = other.projetId;
+        this.sprintId = other.sprintId;
     }
 }

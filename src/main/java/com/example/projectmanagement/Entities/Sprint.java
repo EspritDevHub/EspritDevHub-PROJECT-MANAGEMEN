@@ -1,5 +1,7 @@
 package com.example.projectmanagement.Entities;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -8,6 +10,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Document(collection = "sprints")
+@Getter
+@Setter
 public class Sprint {
 
     @Id
@@ -19,7 +23,7 @@ public class Sprint {
 
     @DBRef
     private List<Tache> taches;
-
+    private String phaseId;
     // Constructeurs
     public Sprint() {}
 

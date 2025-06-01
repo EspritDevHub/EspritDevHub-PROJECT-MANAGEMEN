@@ -5,10 +5,16 @@ import com.example.projectmanagement.Entities.Enums.TypeDureeEnum;
 import com.example.projectmanagement.Entities.Tache;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Data
+
+
+
 public class TacheDTO {
 
     private String id;
@@ -16,10 +22,10 @@ public class TacheDTO {
     private String description;
     private String assigneA;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+
     private LocalDateTime dateDebut;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+
     private LocalDateTime dateFin;
 
     private EtatTacheEnum etat;
@@ -44,4 +50,5 @@ public class TacheDTO {
         this.duree = tache.getDuree();
         this.typeDuree = tache.getTypeDuree();
     }
+
 }
