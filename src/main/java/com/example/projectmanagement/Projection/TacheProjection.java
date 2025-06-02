@@ -1,4 +1,4 @@
-package com.example.projectmanagement.Projections;
+package com.example.projectmanagement.Projection;
 
 import com.example.projectmanagement.Entities.Enums.EtatTacheEnum;
 import com.example.projectmanagement.Entities.Enums.TypeDureeEnum;

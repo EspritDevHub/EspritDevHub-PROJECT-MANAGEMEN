@@ -1,6 +1,7 @@
 package com.example.projectmanagement.iservices;
 
 import com.example.projectmanagement.Dtos.TacheDTO;
+import com.example.projectmanagement.Entities.Tache;
 
 import java.util.List;
 import java.util.Map;
@@ -16,5 +17,6 @@ public interface ITacheService {
     Map<String, Double> getTachesStats();
     List<TacheDTO> getTachesByProjet(String projetId);
     TacheDTO modifierTache(String id, TacheDTO dto);
+    Tache ajouterTacheAuProjet(TacheDTO tacheDTO);
 
 }

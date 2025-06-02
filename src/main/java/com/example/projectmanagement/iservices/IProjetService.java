@@ -22,4 +22,9 @@ public interface IProjetService {
     // Supprimer un projet par son ID
     void deleteProjet(String id);
 
+    void getAvancementProjet();
+
+    double calculerScoreRisqueRetard(String id);
+
+    String interpreterScoreRisque(double score);
 }

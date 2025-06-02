@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 
 import com.example.projectmanagement.Dtos.ProjetDTO;
 import com.example.projectmanagement.Entities.Projet;
+import com.example.projectmanagement.Entities.Enums.EtatTacheEnum;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -31,16 +32,74 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
-@RequiredArgsConstructor
+
 
 public class ProjetServiceImpl implements IProjetService {
 
-    private final ProjetRepository projetRepository;
-    private final GroupeRepository groupeRepository;
-    @Autowired private PhaseRepository phaseRepository;
-     @Autowired private SprintRepository sprintRepository;
-     @Autowired private TacheRepository tacheRepository;
+    @Autowired
+    private ProjetRepository projetRepository;
 
+    @Autowired
+    private GroupeRepository groupeRepository;
+
+    @Autowired
+    private PhaseRepository phaseRepository;
+
+    @Autowired
+    private SprintRepository sprintRepository;
+
+    @Autowired
+    private TacheRepository tacheRepository;
+    public ProjetServiceImpl(ProjetRepository projetRepository, TacheRepository tacheRepository) {
+        this.projetRepository = projetRepository;
+        this.tacheRepository = tacheRepository;
+    }
+    public double calculerScoreRisqueRetard(String projetId) {
+        Projet projet = projetRepository.findById(projetId)
+                .orElseThrow(() -> new RuntimeException("Projet introuvable"));
+
+        List<Tache> taches = tacheRepository.findByProjetId(projetId);
+        if (taches.isEmpty()) return 0.0;
+
+        long totalTaches = taches.size();
+        long tachesTerminees = taches.stream()
+                .filter(t -> t.getEtat() == EtatTacheEnum.TERMINEE)
+                .count();
+
+        long tachesEnRetard = taches.stream()
+                .filter(t -> t.getDateFin() != null &&
+                        t.getDateFin().toLocalDate().isBefore(LocalDate.now()) &&
+                        t.getEtat() != EtatTacheEnum.TERMINEE)
+                .count();
+
+        double proportionTerminees = (double) tachesTerminees / totalTaches;
+        double proportionEnRetard = (double) tachesEnRetard / totalTaches;
+
+        long joursRestants = ChronoUnit.DAYS.between(LocalDate.now(), projet.getDateFinPrevu());
+        if (joursRestants < 0) joursRestants = 0;
+
+        double poidsAvancement = 0.5;
+        double poidsRetard = 0.3;
+        double poidsTempsRestant = 0.2;
+
+        double score = (1 - proportionTerminees) * poidsAvancement
+                + proportionEnRetard * poidsRetard
+                + (joursRestants == 0 ? 1 : 1.0 / joursRestants) * poidsTempsRestant;
+
+        if (projet.getEtat() == EtatProjetEnum.TERMINE) {
+            score = 0.0;
+        } else if (projet.getEtapeProjet() == EtapeProjetEnum.ETUDE) {
+            score *= 0.7;
+        }
+
+        return Math.min(1.0, score);
+    }
+
+    public String interpreterScoreRisque(double score) {
+        if (score < 0.3) return "Faible risque de retard";
+        if (score < 0.7) return "Risque modéré de retard";
+        return "Risque élevé de retard";
+    }
 
 
     @Override
@@ -60,9 +119,9 @@ public class ProjetServiceImpl implements IProjetService {
         Projet saved = projetRepository.save(projet);
         return convertToDTO(saved);
     }
+/*
 
-
- /*   public ProjetDTO createProjet(ProjetDTO projetDTO) {
+   public ProjetDTO createProjet(ProjetDTO projetDTO) {
         Projet projet = convertToEntity(projetDTO);
         projet.setCreationDate(LocalDate.now());
         projet.setEtapeProjet(EtapeProjetEnum.ETUDE);
@@ -212,7 +271,7 @@ public class ProjetServiceImpl implements IProjetService {
     }
    // @Scheduled(cron = "0 0 8 * * *")
    @Scheduled(cron = "*/10 * * * * *") // Exécution toutes les 10 secondes
-   private void getAvancementProjet() {
+   public void getAvancementProjet() {
        List<Projet> projetList = projetRepository.findAll();
 
        for (Projet projet : projetList) {

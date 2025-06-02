@@ -95,6 +95,11 @@ public class TacheController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erreur: " + e.getMessage());
         }
     }
+    @PostMapping("/ajouter")
+    public ResponseEntity<Tache> ajouterTacheAuProjet(@RequestBody TacheDTO tacheDTO) {
+        Tache nouvelleTache = tacheService.ajouterTacheAuProjet(tacheDTO);
+        return new ResponseEntity<>(nouvelleTache, HttpStatus.CREATED);
+    }
 
 
 }

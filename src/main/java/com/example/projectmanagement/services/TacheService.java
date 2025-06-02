@@ -9,8 +9,10 @@ import com.example.projectmanagement.Dtos.TacheDTO;
 
 import com.example.projectmanagement.Entities.Enums.EtatTacheEnum;
 import com.example.projectmanagement.Entities.Enums.TypeDureeEnum;
+import com.example.projectmanagement.Entities.Projet;
 import com.example.projectmanagement.Entities.Tache;
 import com.example.projectmanagement.iservices.ITacheService;
+import com.example.projectmanagement.repository.ProjetRepository;
 import com.example.projectmanagement.repository.TacheRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -30,6 +32,7 @@ import java.util.stream.Collectors;
 public class TacheService implements ITacheService {
 
     private final TacheRepository tacheRepository;
+    private final ProjetRepository projetRepository;
     private final NotificationService notificationService;
 
     @Override
@@ -197,6 +200,16 @@ public class TacheService implements ITacheService {
                     "Votre tâche \"" + tache.getTitre() + "\" est prévue pour le " + tache.getDateFin(),false
             );
         }
+    }
+    @Override
+    public Tache ajouterTacheAuProjet(TacheDTO dto) {
+        Projet projet = projetRepository.findById(dto.getProjetId())
+                .orElseThrow(() -> new RuntimeException("Projet non trouvé"));
+
+        Tache tache = new Tache(dto);
+        tache.setProjetId(projet.getId());
+
+        return tacheRepository.save(tache);
     }
 
 

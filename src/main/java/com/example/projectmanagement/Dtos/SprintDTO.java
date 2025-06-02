@@ -16,8 +16,6 @@ public class SprintDTO {
 
     private String id;
     private String nom;
-    private LocalDate dateDebut;
-    private LocalDate dateFin;
 
     private List<TacheDTO> taches;
 }

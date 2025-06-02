@@ -88,4 +88,32 @@ public class ProjetController {
         Projet updatedProjet = kanbanProjetService.updateEtatEtOrdreProjet(id, etat, ordre);
         return new ResponseEntity<>(updatedProjet, HttpStatus.OK);
     }
+    @PostMapping("/calculer-avancement")
+    public ResponseEntity<String> calculerAvancementViaSwagger() {
+        projetService.getAvancementProjet();
+        return ResponseEntity.ok("Avancement recalculé pour tous les projets.");
+    }
+    @GetMapping("/{id}/risque-retard")
+    public RisqueRetardDTO getRisqueRetard(@PathVariable String id) {
+        double score = projetService.calculerScoreRisqueRetard(id);
+        String interpretation = projetService.interpreterScoreRisque(score);
+        return new RisqueRetardDTO(score, interpretation);
+    }
+
+    public static class RisqueRetardDTO {
+        private double score;
+        private String interpretation;
+
+        public RisqueRetardDTO(double score, String interpretation) {
+            this.score = score;
+            this.interpretation = interpretation;
+        }
+        public double getScore() {
+            return score;
+        }
+        public String getInterpretation() {
+            return interpretation;
+        }
+    }
+
 }

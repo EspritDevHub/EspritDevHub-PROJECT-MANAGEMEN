@@ -32,6 +32,7 @@ public class TacheDTO {
     private Integer avancement;
     private Float duree;
     private TypeDureeEnum typeDuree;
+    private String projetId;
 
     // ✅ Constructeur vide requis par Jackson pour la désérialisation
     public TacheDTO() {
@@ -49,6 +50,7 @@ public class TacheDTO {
         this.avancement = tache.getAvancement();
         this.duree = tache.getDuree();
         this.typeDuree = tache.getTypeDuree();
+        this.projetId = tache.getProjetId();
     }
 
 }

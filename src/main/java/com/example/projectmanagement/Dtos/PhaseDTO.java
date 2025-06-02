@@ -19,7 +19,7 @@ public class PhaseDTO {
     private String nom;
     private LocalDate dateDebut;
     private LocalDate dateFin;
-    private List<SprintDTO> sprints = new ArrayList<>();
+    private List<SprintDTO> sprints;
 
     public PhaseDTO (String id , String nom, LocalDate dateDebut, LocalDate dateFin ){
         this.id = id;
