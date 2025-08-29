@@ -4,6 +4,6 @@ public enum TypeDureeEnum {
 
     HEURE,
     JOUR,
-    SEMAINE,
-    MOIS
+
+
 }

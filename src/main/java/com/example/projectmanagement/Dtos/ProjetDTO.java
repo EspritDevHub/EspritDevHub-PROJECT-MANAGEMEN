@@ -1,42 +1,41 @@
 package com.example.projectmanagement.Dtos;
 
-import com.example.projectmanagement.Entities.Enums.EtatProjetEnum;
-import com.example.projectmanagement.Entities.Enums.EtapeManagementEnum;
+import com.example.projectmanagement.Dtos.JalonDTO;
+import com.example.projectmanagement.Dtos.PhaseDTO;
 import com.example.projectmanagement.Entities.Enums.EtapeProjetEnum;
+import com.example.projectmanagement.Entities.Enums.EtatProjetEnum;
+import com.example.projectmanagement.Entities.Groupe;
+import com.example.projectmanagement.Entities.Phase;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class ProjetDTO {
-    private String id;
 
+    private String id;
     private String code;
     private String titre;
     private String description;
 
     private EtatProjetEnum etat;
-    private EtapeManagementEnum etapeManagement;
     private EtapeProjetEnum etapeProjet;
+    private Integer ordre;
 
-    private LocalDate dateDeb;
-    private LocalDate dateFin;
-
-    private LocalDate dateDebPrevu;
+    private LocalDate dateDebut;
     private LocalDate dateFinPrevu;
 
-    private String portefeuilleId;
-    private String programmeId;
-    private String typeProjet;
+    private Groupe groupe; // Ou nomGroupe si vous préférez exposer le nom
 
-    private String fournisseurId;
-    private String sponsorId;
-    private String chefDeProjetId;
-    private String clientId;
+    private List<PhaseDTO> jalons;
 
     private Long createdBy;
     private LocalDate creationDate;
+
+
 }

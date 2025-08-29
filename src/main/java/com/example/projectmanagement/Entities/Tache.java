@@ -2,53 +2,67 @@ package com.example.projectmanagement.Entities;
 
 import com.example.projectmanagement.Dtos.TacheDTO;
 import com.example.projectmanagement.Entities.Enums.EtatTacheEnum;
-import com.example.projectmanagement.Entities.Enums.TypeCoutEnum;
 import com.example.projectmanagement.Entities.Enums.TypeDureeEnum;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import java.time.LocalDateTime;
 
-@Document(collection = "activites")
+@Document(collection = "taches")
 @Data
 @NoArgsConstructor
+@Getter
+@Setter
 public class Tache {
 
     @Id
     private String id;
 
-    private String titre;
-    private String description;
-    private Float duree;
-    private Float cout;
-    private LocalDateTime dateDebPlanif;
-    private LocalDateTime dateFinPlanif;
-    private LocalDateTime dateDeb;
-    private LocalDateTime dateFin;
-    private EtatTacheEnum etat;
-    private TypeDureeEnum typeDuree;
-    private TypeCoutEnum typeCout;
+    private String titre;                   // Titre de la tâche
+    private String description;             // Description courte
+    private String assigneA;                // Personne assignée à la tâche
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
+    private LocalDateTime dateDebut;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")// Date de début prévue
+    private LocalDateTime dateFin;          // Date de fin prévue
 
-    private Integer avancementTache;
+    private EtatTacheEnum etat;             // État (NON_COMMENCE, EN_COURS, TERMINE)
+    private Integer avancement;             // Pourcentage d'avancement (ex: 75)
 
-
-
-    public Tache(TacheDTO tacheDTO) {
-        this.id = tacheDTO.getId();
-        this.titre = tacheDTO.getTitre();
-        this.description = tacheDTO.getDescription();
-        this.duree = tacheDTO.getDuree();
-        this.cout = tacheDTO.getCout();
-        this.dateDebPlanif = tacheDTO.getDateDebPlanif();
-        this.dateFinPlanif = tacheDTO.getDateFinPlanif();
-        this.dateDeb = tacheDTO.getDateDeb();
-        this.dateFin = tacheDTO.getDateFin();
-        this.etat = tacheDTO.getEtat();
-        this.typeDuree = tacheDTO.getTypeDuree();
-        this.typeCout = tacheDTO.getTypeCout();
-        this.avancementTache = tacheDTO.getAvancementTache();
+    private Float duree;                    // Durée estimée (ex: 3.5)
+    private TypeDureeEnum typeDuree;//(heure, jour)
+    private String projetId;
+    private String sprintId;
+    public Tache(TacheDTO dto) {
+        this.id = dto.getId();
+        this.titre = dto.getTitre();
+        this.description = dto.getDescription();
+        this.assigneA = dto.getAssigneA();
+        this.dateDebut = dto.getDateDebut();
+        this.dateFin = dto.getDateFin();
+        this.etat = dto.getEtat();
+        this.avancement = dto.getAvancement();
+        this.duree = dto.getDuree();
+        this.typeDuree = dto.getTypeDuree();
+    }
+    // Constructeur de copie
+    public Tache(Tache other) {
+        this.id = other.id;
+        this.titre = other.titre;
+        this.description = other.description;
+        this.assigneA = other.assigneA;
+        this.dateDebut = other.dateDebut;
+        this.dateFin = other.dateFin;
+        this.etat = other.etat;
+        this.avancement = other.avancement;
+        this.duree = other.duree;
+        this.typeDuree = other.typeDuree;
+        this.projetId = other.projetId;
+        this.sprintId = other.sprintId;
     }
 }
